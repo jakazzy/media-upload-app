@@ -1,25 +1,14 @@
-export const feeds = [
-   
-    {
-        "id": 1,
-        "caption": "xanderina",
-        "url": "https://s3.eu-west-2.amazonaws.com/",
-        "createdAt": "2020-01-24T09:50:28.138Z",
-        "updatedAt": "2020-01-24T09:50:28.139Z"
-    },
+import { Router, Request, Response } from 'express'
+import { FeedItem } from '../models/FeedItem'
+import { requireAuth } from '../../users/routes/auth.router'
+// import * as AWS from '../../../../aws'
 
-    {
-        "id": 2,
-        "caption": "xanderia",
-        "url": "https://s3.eu-west-2.amazonaws.com/",
-        "createdAt": "2020-01-24T09:50:28.138Z",
-        "updatedAt": "2020-01-24T09:50:28.139Z"
-    },
-    {
-        "id": 3,
-        "caption": "xander",
-        "url": "https://s3.eu-west-2.amazonaws.com/",
-        "createdAt": "2020-01-24T09:50:28.138Z",
-        "updatedAt": "2020-01-24T09:50:28.139Z"
-    }
-]
+const router: Router = Router()
+
+// Get all feed items
+
+// Ger a specific resource by primary key
+
+// update a specific resource
+
+// Get a signedurl to put a new item in the bucket 
