@@ -17,7 +17,4 @@ export class FeedItem extends Model<FeedItem> {
     @UpdatedAt
     public updatedAt: Date = new Date()
     
-    @ForeignKey(()=> User)
-    @Column
-    public email: string
 }

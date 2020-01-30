@@ -6,6 +6,7 @@ import * as EmailValidator from 'email-validator'
 import { User } from '../models/User'
 import  { config } from '../../../../config/config'
 
+
 const router: Router = Router()
 
 async function generatePassword(plainTextPassword: string): Promise<string> {
@@ -25,7 +26,8 @@ function generateJWT(user: User): string{
 export function requireAuth(req: Request, res: Response, next: NextFunction){
     if(!req.headers || !req.headers.authorization){
     return res.status(401).send({message: 'No authorization headers.'})}
-
+    
+    console.log(req.headers.authorization, 'this is thw token')
     const token_bearer = req.headers.authorization.split(' ')
     if(token_bearer.length !== 2){
         return res.status(402).send({message: 'Malformed token'})
@@ -74,9 +76,12 @@ router.post('/login', async(req: Request, res:Response)=>{
 
 // REgister a new user
 router.post('/', async(req: Request, res: Response) =>{
-   const { email, plainTextPassword } = req.body
+ 
+   const  email = req.body.email
+   const plainTextPassword = req.body.password
 
    if(!email || !EmailValidator.validate(email)){
+       
        return res.status(400).send({auth:false, message:'Email is required or malformed'})
    }
 
@@ -96,12 +101,15 @@ router.post('/', async(req: Request, res: Response) =>{
        password_hash:password_hash
    })
 
-   let savedUser
+   let savedUser;
    try{
-       savedUser = await newUser.save()
+    savedUser = await newUser.save()
    }catch(e){
        throw e
    }
+
+   const jwt =generateJWT(savedUser)
+   return res.status(201).send({token: jwt, user: savedUser.short()})
 })
 
 router.get('/', async(req:Request, res: Response) =>{
@@ -109,3 +117,7 @@ router.get('/', async(req:Request, res: Response) =>{
 })
 
 export const AuthRouter: Router = router
+
+// http://udagram-asare-dev-dev.eu-west-2.elasticbeanstalk.com
+
+// "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImtvZmlAZ21haWwuY29tIiwicGFzc3dvcmRfaGFzaCI6IiQyYiQxMCR1Lm14VWM0d1NZdkp5UzE5NEh3YmNlY2dnVUg4eGpnY1RBMDNsSlFMTzVHTHgzcDlJejI2MiIsImNyZWF0ZWRBdCI6IjIwMjAtMDEtMzBUMTc6NDc6NDkuNDMyWiIsInVwZGF0ZWRBdCI6IjIwMjAtMDEtMzBUMTc6NDc6NDkuNDMzWiIsImlhdCI6MTU4MDQwNjQ3NH0.Es6un6qxFEKlTBCT7XFNPX4DuguMJTgFDndc-bBeq04"
