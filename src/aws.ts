@@ -8,8 +8,6 @@ if(con.aws_profile !== "DEPLOYED"){
     AWS.config.credentials = credentials
 }
 
-const credentials = new AWS.SharedIniFileCredentials({profile: con.aws_profile})
-AWS.config.credentials = credentials
 export const s3 = new AWS.S3({
     signatureVersion:'v4',
     region: con.aws_region,
